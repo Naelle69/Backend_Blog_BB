@@ -1,0 +1,132 @@
+/* admin.css — Thème "Blog Bébé" */
+
+body,
+.content-header,
+td {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #CFEDF2 !important;
+    color: #373737;
+}
+
+tr:active {
+    background-color: #ffffff !important;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #373737;
+    font-weight: 600;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-color: #ECCFC8 !important;
+}
+
+thead tr th a {
+    color: #373737 !important;
+    font-weight: 700;
+    font-size: medium;
+}
+
+td a,
+td a:hover {
+    color: #373737;
+    font-weight: 600;
+}
+
+/* Form switch toggle */
+.ea-dark-scheme .form-switch .form-check-input:checked,
+.form-switch .form-check-input:checked {
+    background-color: #ECCFC8;
+    border-color: #ECCFC8;
+}
+
+/* Champs texte filtrable */
+.searchable .text-field-text,
+.color-sample {
+    background: #F6F4D6 !important;
+}
+
+.main-header #header-logo a {
+    color: #FDF9AA !important;
+}
+
+/* Logo */
+.logo-custom {
+    color: #373737;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+/* Sidebar et menu */
+.sidebar {
+    background-color: #ECCFC8;
+}
+
+#main-menu .menu .menu-item.active {
+    background-color: #FDF9AA;
+}
+
+.menu-item-contents .menu-item-label {
+    color: #373737;
+    font-weight: 600;
+    font-size: large;
+}
+
+/* Lien complet */
+a.menu-item-contents {
+    color: #373737;
+    text-decoration: none;
+}
+
+/* Icône du menu */
+a.menu-item-contents .menu-icon i {
+    color: #373737;
+}
+
+/* Hover */
+a.menu-item-contents:hover {
+    color: #373737;
+}
+a.menu-item-contents:hover .menu-icon i {
+    color: #373737;
+}
+
+/* États actifs/focus */
+.menu-item-contents .menu-item-label:active,
+.menu-item-contents .menu-item-label:focus,
+a.menu-item-contents .menu-icon i:active,
+a.menu-item-contents .menu-icon i:focus {
+    color: #ECCFC8;
+}
+
+/* Boutons */
+button, .btn {
+    border-radius: 5px !important;
+    background-color: #373737 !important;
+    color: #FDF9AA;
+    font-weight: 500;
+}
+
+/* Avatar utilisateur */
+.user-menu-wrapper .user-avatar,
+.user-name {
+    color: #373737;
+    background-color: transparent !important;
+}
+
+.dropdown-settings .dropdown-settings-button {
+    color: #373737;
+}
+
+/* Top bar */
+.content-top {
+    align-items: center;
+    box-shadow: none !important;
+    background-color: #F6F4D6;
+}
+
+/* Menu header */
+.menu-header-contents .menu-item-label {
+    color: #ECCFC8;
+    font-weight: bold;
+}

@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * This function display all ingredients
+ */
 #[Route('/recipe')]
 final class RecipeController extends AbstractController
 {

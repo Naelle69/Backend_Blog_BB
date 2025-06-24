@@ -18,6 +18,10 @@ class RecipeForm extends AbstractType
             ->add('content')
             ->add('image')
             ->add('updatedAt')
+            ->add('createdAt', null, [
+                'widget' => 'single_text',
+            ])
+            ->add('time')
             ->add('foodGroup', EntityType::class, [
                 'class' => FoodGroup::class,
                 'choice_label' => 'id',

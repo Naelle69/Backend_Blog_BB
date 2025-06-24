@@ -1,0 +1,52 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content %}
+<div class="min-h-screen p-6 bg-[#CFEDF2] text-[#373737] rounded-xl">
+
+    <h1 class="text-3xl font-bold mb-6">👶 Bienvenue sur le tableau de bord</h1>
+
+    <h2 class="text-2xl font-bold text-[#373737] mb-4">Statistiques du site</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-5">
+        <div class="rounded-xl p-4 bg-[#ECCFC8] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Utilisateurs</h2>
+            <p class="text-3xl font-bold">{{ userCount }}</p>
+        </div>
+
+        <div class="rounded-xl p-4 bg-[#CFEDF2] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Recettes</h2>
+            <p class="text-3xl font-bold">{{ recipeCount }}</p>
+        </div>
+
+        <div class="rounded-xl p-4 bg-[#F6F4D6] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Ingrédients</h2>
+            <p class="text-3xl font-bold">{{ ingredientCount }}</p>
+        </div>
+
+        <div class="rounded-xl p-4 bg-[#FDF9AA] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Groupes alimentaires</h2>
+            <p class="text-3xl font-bold">{{ groupCount }}</p>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-semibold mb-4">✏️ Actions rapides</h2>
+        <div class="flex flex-wrap gap-4">
+            <a href="{{ path('admin') }}?crudAction=new&crudControllerFqcn=App\\Controller\\Admin\\RecipeCrudController"
+               class="bg-[#ECCFC8] text-[#373737] hover:bg-pink-200 font-medium py-2 px-4 rounded-lg shadow">
+                ➕ Ajouter une recette
+            </a>
+            <a href="{{ path('admin') }}?crudAction=index&crudControllerFqcn=App\\Controller\\Admin\\IngredientCrudController"
+               class="bg-[#FDF9AA] text-[#373737] hover:bg-yellow-200 font-medium py-2 px-4 rounded-lg shadow">
+                🥕 Voir les ingrédients
+            </a>
+            <a href="{{ path('admin') }}?crudAction=index&crudControllerFqcn=App\\Controller\\Admin\\FoodGroupCrudController"
+               class="bg-[#CFEDF2] text-[#373737] hover:bg-blue-200 font-medium py-2 px-4 rounded-lg shadow">
+                🧺 Groupes alimentaires
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

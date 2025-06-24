@@ -11,10 +11,14 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/EAA/Documents/CDA/Portfolio/Blog_bb/Backend_Blog_BB/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/EAA/Documents/CDA/Portfolio/Blog_bb/Backend_Blog_BB/templates/home/index.html.twig</code></li>
-    </ul>
+    <a href="{{ path('app_login') }}">
+        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none 
+            focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center dark:bg-blue-600 
+            dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Se connecter
+        </button>
+    </a>
+
+
 </div>
 {% endblock %}

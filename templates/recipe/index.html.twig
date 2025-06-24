@@ -25,17 +25,17 @@
                 <td>{{ recipe.image }}</td>
                 <td>{{ recipe.updatedAt ? recipe.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}">show</a>
-                    <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}">edit</a>
+                    <a href="{{ path('app_recipe_show', {'id': recipe.id}) }}">Voir plus</a>
+                    <a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}">créer</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Aucune recette trouvée</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_recipe_new') }}">Create new</a>
+    <a href="{{ path('app_recipe_new') }}">Créer une nouvelle recette</a>
 {% endblock %}

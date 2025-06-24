@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/food/group')]
+#[Route('/foodGroup')]
 final class FoodGroupController extends AbstractController
 {
     #[Route(name: 'app_food_group_index', methods: ['GET'])]
