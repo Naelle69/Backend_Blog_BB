@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau mot de passe{% endblock %}
+
+{% block body %}
+    <div class="container mt-5" style="max-width: 500px;">
+        <h2 class="mb-4">Choisissez un nouveau mot de passe</h2>
+
+        <p>Veuillez entrer votre nouveau mot de passe ci-dessous. Une fois validé, vous serez redirigé vers la page de connexion.</p>
+
+        {# Formulaire de réinitialisation de mot de passe #}
+        {{ form_start(resetForm) }}
+
+            {# Champ du nouveau mot de passe #}
+            <div class="mb-3">
+                {{ form_label(resetForm.plainPassword, 'Nouveau mot de passe') }}
+                {{ form_widget(resetForm.plainPassword, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(resetForm.plainPassword) }}
+            </div>
+
+            <button class="btn btn-primary w-100 mt-3">Réinitialiser mon mot de passe</button>
+
+        {{ form_end(resetForm) }}
+    </div>
+{% endblock %}

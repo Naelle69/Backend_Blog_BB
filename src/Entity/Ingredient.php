@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\IngredientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
@@ -22,8 +24,13 @@ class Ingredient
     #[ORM\Column]
     private ?float $quantity = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ingredients')]
-    private ?Recipe $recipe = null;
+    #[ORM\ManyToMany(targetEntity: Recipe::class, inversedBy: 'ingredients')]
+    private Collection $recipes;
+
+    public function __construct()
+    {
+        $this->recipes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -38,7 +45,6 @@ class Ingredient
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -50,7 +56,6 @@ class Ingredient
     public function setUnit(string $unit): static
     {
         $this->unit = $unit;
-
         return $this;
     }
 
@@ -62,19 +67,34 @@ class Ingredient
     public function setQuantity(float $quantity): static
     {
         $this->quantity = $quantity;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recipe>
+     */
+    public function getRecipes(): Collection
+    {
+        return $this->recipes;
+    }
+
+    public function addRecipe(Recipe $recipe): static
+    {
+        if (!$this->recipes->contains($recipe)) {
+            $this->recipes->add($recipe);
+        }
 
         return $this;
     }
 
-    public function getRecipe(): ?Recipe
+    public function removeRecipe(Recipe $recipe): static
     {
-        return $this->recipe;
+        $this->recipes->removeElement($recipe);
+        return $this;
     }
 
-    public function setRecipe(?Recipe $recipe): static
+    public function __toString(): string
     {
-        $this->recipe = $recipe;
-
-        return $this;
+        return $this->name ?? '';
     }
 }

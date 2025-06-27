@@ -35,8 +35,7 @@ class Recipe
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: "Le contenu de la recette est obligatoire.")]
     #[Assert\Length(
-        min: 2,
-        max: 50,
+        min: 50,
         minMessage: "Le contenu doit contenir au moins {{ limit }} caractères."
     )]
     private string $content;
@@ -66,7 +65,7 @@ class Recipe
     /**
      * @var Collection<int, Ingredient>
      */
-    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recipe')]
+    #[ORM\ManyToMany(targetEntity: Ingredient::class, mappedBy: 'recipes')]
     private Collection $ingredients;
 
     #[ORM\Column]
@@ -139,21 +138,13 @@ class Recipe
     {
         if (!$this->ingredients->contains($ingredient)) {
             $this->ingredients->add($ingredient);
-            $ingredient->setRecipe($this);
         }
-
         return $this;
     }
 
     public function removeIngredient(Ingredient $ingredient): static
     {
-        if ($this->ingredients->removeElement($ingredient)) {
-            // set the owning side to null (unless already changed)
-            if ($ingredient->getRecipe() === $this) {
-                $ingredient->setRecipe(null);
-            }
-        }
-
+        $this->ingredients->removeElement($ingredient);
         return $this;
     }
 

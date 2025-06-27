@@ -16,6 +16,29 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
+    //Trouver les recettes d’un certain groupe alimentaire
+    public function findByFoodGroup(string $groupName): array
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.foodGroup', 'g')
+            ->where('g.name = :group')
+            ->setParameter('group', $groupName)
+            ->getQuery()
+            ->getResult();
+    }
+
+    //Trier les recettes par date de création
+    public function findLatest(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
 //    /**
 //     * @return Recipe[] Returns an array of Recipe objects
 //     */

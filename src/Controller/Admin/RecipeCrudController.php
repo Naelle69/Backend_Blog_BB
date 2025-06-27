@@ -42,6 +42,13 @@ class RecipeCrudController extends AbstractCrudController
             // Relation avec FoodGroup
             AssociationField::new('foodGroup', 'Groupe alimentaire')
                 ->setCrudController(FoodGroupCrudController::class),
+
+            AssociationField::new('ingredients', 'Les ingrédients')
+                ->setFormTypeOptions([
+                    'by_reference' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                ]),
         ];
     }
 }

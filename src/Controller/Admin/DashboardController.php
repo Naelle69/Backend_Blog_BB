@@ -1,13 +1,12 @@
 <?php
 
-// src/Controller/Admin/DashboardController.php
-
 namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Entity\Recipe;
 use App\Entity\Ingredient;
 use App\Entity\FoodGroup;
+use App\Form\RecipeForm;
 use App\Repository\UserRepository;
 use App\Repository\RecipeRepository;
 use App\Repository\IngredientRepository;
@@ -17,19 +16,19 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class DashboardController extends AbstractDashboardController
 {
-    // Déclarations des dépendances nécessaires
     private UserRepository $userRepo;
     private RecipeRepository $recipeRepo;
     private IngredientRepository $ingredientRepo;
     private FoodGroupRepository $groupRepo;
     private EntityManagerInterface $em;
 
-    // Injection de dépendances via le constructeur
     public function __construct(
         UserRepository $userRepo,
         RecipeRepository $recipeRepo,
@@ -44,63 +43,75 @@ class DashboardController extends AbstractDashboardController
         $this->em = $em;
     }
 
-    // Point d'entrée du tableau de bord
     #[Route('/admin', name: 'admin')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
-        // Récupérer les statistiques de base
-        $userCount = $this->userRepo->count([]);
-        $recipeCount = $this->recipeRepo->count([]);
-        $ingredientCount = $this->ingredientRepo->count([]);
-        $groupCount = $this->groupRepo->count([]);
-
-        // Requête SQL brute pour les recettes par mois
-        $conn = $this->em->getConnection();
-        $sql = "
-            SELECT MONTH(created_at) AS month, COUNT(*) AS count
-            FROM recipe
-            WHERE YEAR(created_at) = YEAR(CURDATE())
-            GROUP BY month
-        ";
-        $stmt = $conn->prepare($sql);
-        $results = $stmt->executeQuery()->fetchAllAssociative();
-
-        // Préparation d’un tableau avec 12 mois initialisés à 0
-        $recipesPerMonth = array_fill(1, 12, 0);
-
-        // Injection des données récupérées dans le tableau
-        foreach ($results as $row) {
-            $recipesPerMonth[(int)$row['month']] = (int)$row['count'];
-        }
-
-        // Rendu de la vue personnalisée
-        return $this->render('admin/custom_dashboard.html.twig', [
-            'userCount' => $userCount,
-            'recipeCount' => $recipeCount,
-            'ingredientCount' => $ingredientCount,
-            'groupCount' => $groupCount,
-            'recipesPerMonth' => $recipesPerMonth
-        ]);
+        return $this->redirectToRoute('admin_dashboard');
     }
 
-    // Ajout de fichiers CSS/JS spécifiques pour le style et les graphiques
+    #[Route('/admin/dashboard', name: 'admin_dashboard')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function dashboard(Request $request): Response
+    {
+
+    $userCount = $this->userRepo->count([]);
+    $recipeCount = $this->recipeRepo->count([]);
+    $ingredientCount = $this->ingredientRepo->count([]);
+    $groupCount = $this->groupRepo->count([]);
+
+    $conn = $this->em->getConnection();
+    $sql = "
+        SELECT MONTH(created_at) AS month, COUNT(*) AS count
+        FROM recipe
+        WHERE YEAR(created_at) = YEAR(CURDATE())
+        GROUP BY month
+    ";
+    $stmt = $conn->prepare($sql);
+    $results = $stmt->executeQuery()->fetchAllAssociative();
+
+    $recipesPerMonth = array_fill(1, 12, 0);
+    foreach ($results as $row) {
+        $recipesPerMonth[(int)$row['month']] = (int)$row['count'];
+    }
+
+    $recipe = new Recipe();
+    $form = $this->createForm(RecipeForm::class, $recipe);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $this->em->persist($recipe);
+        $this->em->flush();
+        $this->addFlash('success', 'Recette ajoutée avec succès');
+        return $this->redirectToRoute('admin_dashboard');
+    }
+
+    return $this->render('admin/custom_dashboard.html.twig', [
+        'userCount' => $userCount,
+        'recipeCount' => $recipeCount,
+        'ingredientCount' => $ingredientCount,
+        'groupCount' => $groupCount,
+        'recipesPerMonth' => $recipesPerMonth,
+        'form' => $form->createView(),
+    ]);
+}
+
+
     public function configureAssets(): Assets
     {
         return Assets::new()
-            ->addCssFile('/styles/admin.css') // Ton thème personnalisé
-            ->addCssFile('https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css') // Flowbite
-            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js')  // Flowbite
-            ->addJsFile('https://cdn.jsdelivr.net/npm/chart.js'); // Chart.js pour les stats
+            ->addCssFile('/styles/admin.css')
+            ->addCssFile('https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css')
+            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js')
+            ->addJsFile('https://cdn.jsdelivr.net/npm/chart.js');
     }
 
-    // Configuration du titre du dashboard
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
             ->setTitle('Backend Blog BB');
     }
 
-    // Configuration du menu latéral (liens vers entités)
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');

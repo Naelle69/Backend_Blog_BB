@@ -28,7 +28,7 @@ class IngredientCrudController extends AbstractCrudController
 
             TextField::new('unit', 'Unité'),
 
-            AssociationField::new('recipe', 'Recette')
+            AssociationField::new('recipes', 'Recettes')
                 ->setCrudController(RecipeCrudController::class),
         ];
     }
