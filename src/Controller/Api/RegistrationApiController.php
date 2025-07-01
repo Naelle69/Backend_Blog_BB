@@ -11,9 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/* #[Route('/api', name: 'api_')] */
 class RegistrationApiController extends AbstractController
 {
-    #[Route('/api/register', name: 'api_register', methods: ['POST'])]
+    #[Route('/register', name: 'api_register', methods: ['POST'])]
     public function register(
         Request $request,
         EntityManagerInterface $em,

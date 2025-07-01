@@ -4,11 +4,7 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-controllers_api:
-    resource:
-        path: ../src/Controller/Api/
-        namespace: App\Controller\Api
-    type: attribute
-    prefix: /api
+
+
 
 
