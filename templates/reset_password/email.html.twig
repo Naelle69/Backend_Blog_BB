@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Réinitialisation de votre mot de passe</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+    <table width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <tr>
+        <td>
+          <h2 style="color: #1a202c;">Bonjour,</h2>
+
+          <p style="font-size: 14px;">
+            Vous avez demandé à réinitialiser votre mot de passe sur <strong>Blog BB</strong>.
+          </p>
+
+          <p style="font-size: 14px;">
+            Cliquez sur le lien ci-dessous pour choisir un nouveau mot de passe :
+          </p>
+
+          <p style="text-align: center; margin: 30px 0;">
+            <a href="{{ url('app_reset_password', {token: resetToken.token}) }}" 
+               style="background-color: #3b82f6; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; display: inline-block;">
+              Réinitialiser mon mot de passe
+            </a>
+          </p>
+
+          <p style="font-size: 13px; color: #555;">
+            Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+          </p>
+
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;" />
+
+          <p style="font-size: 12px; color: #999;">
+            Si vous n'avez pas fait cette demande, vous pouvez ignorer cet e-mail.
+          </p>
+
+          <p style="font-size: 13px; margin-top: 20px;">
+            — L’équipe Blog BB
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+

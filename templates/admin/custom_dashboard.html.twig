@@ -1,0 +1,141 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content %}
+<div class="min-h-screen p-6 bg-[#CFEDF2] text-[#373737] rounded-xl">
+    <h1 class="text-3xl font-bold mb-6">👋 Bienvenue sur le tableau de bord</h1>
+
+    {# <p class="text-sm text-gray-600 mb-4">
+        Connecté en tant que <strong>{{ app.user.email }}</strong>
+    </p> #}
+
+    <h2 class="text-2xl font-bold text-[#373737] mb-4">Statistiques du site</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-5">
+        <div class="rounded-xl p-4 bg-[#ECCFC8] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Utilisateurs</h2>
+            <p class="text-3xl font-bold">{{ userCount }}</p>
+        </div>
+        <div class="rounded-xl p-4 bg-[#CFEDF2] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Recettes</h2>
+            <p class="text-3xl font-bold">{{ recipeCount }}</p>
+        </div>
+        <div class="rounded-xl p-4 bg-[#F6F4D6] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Ingrédients</h2>
+            <p class="text-3xl font-bold">{{ ingredientCount }}</p>
+        </div>
+        <div class="rounded-xl p-4 bg-[#FDF9AA] text-[#373737] shadow">
+            <h2 class="text-lg font-semibold">Groupes alimentaires</h2>
+            <p class="text-3xl font-bold">{{ groupCount }}</p>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 class="text-2xl font-semibold mb-4">📊 Recettes publiées par mois</h2>
+        <canvas id="recipesChart" height="100"></canvas>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-semibold mb-4">⚡ Actions rapides</h2>
+        <div class="flex flex-wrap gap-4">
+            <div class="p-6 mt-6">
+                <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2 text-purple-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                    Ajouter une recette rapide
+                </h2>
+
+                {% if form is defined %}
+                    {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+
+                        {# Titre #}
+                        <div>
+                            {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+                        </div>
+
+                        {# Contenu #}
+                        <div>
+                            {{ form_label(form.content, 'Contenu', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                            {{ form_widget(form.content, {'attr': {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+                        </div>
+
+                        {# Temps #}
+                        <div>
+                            {{ form_label(form.time, 'Temps (min)', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                            {{ form_widget(form.time, {'attr': {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+                        </div>
+
+                        {# Ingrédients #}
+                        <div class="mb-6">
+                            <label class="block mb-2 text-sm font-medium text-gray-900">Les ingrédients</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2">
+                                {% for checkbox in form.ingredients %}
+                                    <label class="inline-flex items-center space-x-2 text-sm text-gray-700">
+                                        {{ form_widget(checkbox) }}
+                                        {{ form_label(checkbox, null, {'label_attr': {'class': 'ml-1'}}) }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                            {{ form_errors(form.ingredients) }}
+                        </div>
+
+                        {# Groupe alimentaire #}
+                        <div>
+                            {{ form_label(form.foodGroup, 'Groupe alimentaire', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                            {{ form_widget(form.foodGroup, {'attr': {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+                        </div>
+
+                        {# 📸 Image upload #}
+                        <div>
+                            {{ form_label(form.imageFile, 'Image de la recette', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                            {{ form_widget(form.imageFile, {
+                                'attr': {
+                                    'class': 'block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none'
+                                }
+                            }) }}
+                            {{ form_errors(form.imageFile) }}
+                        </div>
+
+                        <button type="submit" class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Créer ma recette
+                        </button>
+
+                    {{ form_end(form) }}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('recipesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+                datasets: [{
+                    label: 'Recettes',
+                    data: {{ recipesPerMonth|json_encode|raw }},
+                    backgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

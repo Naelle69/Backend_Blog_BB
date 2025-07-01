@@ -1,0 +1,39 @@
+{# templates/registration/register.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="flex justify-center items-center min-h-screen bg-[#CFEDF2] px-4">
+    <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-[#373737] text-center">Créer un compte</h1>
+
+        {{ form_start(registrationForm) }}
+
+
+            <div class="mb-4">
+                {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'block text-sm font-medium text-[#373737]'}}) }}
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#ECCFC8]'}}) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'block text-sm font-medium text-[#373737]'}}) }}
+                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#ECCFC8]'}}) }}
+                {{ form_errors(registrationForm.plainPassword.first) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'block text-sm font-medium text-[#373737]'}}) }}
+                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#ECCFC8]'}}) }}
+                {{ form_errors(registrationForm.plainPassword.second) }}
+            </div>
+
+            <div class="mt-6">
+                {{ form_widget(registrationForm.submit, {'attr': {'class': 'w-full bg-[#ECCFC8] text-[#373737] font-semibold py-2 rounded hover:bg-[#f2bfb5] transition'}}) }}
+            </div>
+
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
+{% endblock %}

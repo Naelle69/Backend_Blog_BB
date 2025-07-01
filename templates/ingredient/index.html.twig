@@ -1,39 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ingredient index{% endblock %}
+{% block title %}Liste des Ingrédients{% endblock %}
 
 {% block body %}
-    <h1>Ingredient index</h1>
+    <h1>Sélectionner des Ingrédients</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Unit</th>
-                <th>Quantity</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for ingredient in ingredients %}
-            <tr>
-                <td>{{ ingredient.id }}</td>
-                <td>{{ ingredient.name }}</td>
-                <td>{{ ingredient.unit }}</td>
-                <td>{{ ingredient.quantity }}</td>
-                <td>
-                    <a href="{{ path('app_ingredient_show', {'id': ingredient.id}) }}">show</a>
-                    <a href="{{ path('app_ingredient_edit', {'id': ingredient.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <form method="post" action="#">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sélectionner</th>
+                    <th>Nom</th>
+                    <th>Unité</th>
+                    <th>Quantité</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selected_ingredients[]" value="{{ ingredient.id }}">
+                        </td>
+                        <td>{{ ingredient.name }}</td>
+                        <td>{{ ingredient.unit }}</td>
+                        <td>{{ ingredient.quantity }}</td>
+                        <td>
+                            <a href="{{ path('app_ingredient_show', {'id': ingredient.id}) }}">Afficher</a>
+                            <a href="{{ path('app_ingredient_edit', {'id': ingredient.id}) }}">Modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">Aucun ingrédient trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_ingredient_new') }}">Create new</a>
+        <button type="submit" class="btn btn-primary">Valider la sélection</button>
+    </form>
+
+    <a href="{{ path('app_ingredient_new') }}" class="btn btn-secondary mt-3">Créer un nouvel ingrédient</a>
 {% endblock %}

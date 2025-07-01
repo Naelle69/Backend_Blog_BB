@@ -5,16 +5,34 @@
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .example-wrapper code { background:rgb(252, 185, 185); padding: 2px 6px; }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-md text-center shadow-[#CFEDF2]">
+        <h2 class="text-2xl font-bold text-[#4B715F] mb-4">Bienvenue sur <span class="text-[#ECCFC8]">Blog BB</span> 🌿</h2>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/EAA/Documents/CDA/Portfolio/Blog_bb/Backend_Blog_BB/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/EAA/Documents/CDA/Portfolio/Blog_bb/Backend_Blog_BB/templates/home/index.html.twig</code></li>
-    </ul>
+        <p class="text-[#373737] mb-6">
+            Vous avez déjà un compte ?
+        </p>
+
+        <a href="{{ path('app_login') }}">
+            <button type="button" class="text-[#ECCFC8] bg-[#4B715F] hover:bg-[#3e5e4d] focus:ring-4 focus:outline-none 
+                focus:ring-[#CFEDF2] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition">
+                Se connecter
+            </button>
+        </a>
+
+        <p class="mt-6 text-[#373737]">
+            Vous n'avez pas encore de compte ?
+            <a href="{{ path('app_register') }}" class="text-[#ECCFC8] font-semibold hover:underline">
+                Inscrivez-vous
+            </a>
+        </p>
+    </div>
+
+</div>
+
+
 </div>
 {% endblock %}

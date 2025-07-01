@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="flex justify-center items-center min-h-screen ">
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-center mb-6">Connexion</h1>
+
+        {# Messages flash #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 text-sm text-{{ label == 'success' ? 'green' : (label == 'error' or label == 'danger' ? 'red' : 'blue') }}-700 bg-{{ label == 'success' ? 'green' : (label == 'error' or label == 'danger' ? 'red' : 'blue') }}-100 rounded-lg" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {# Erreur de connexion Symfony #}
+        {% if error %}
+            <div class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        {# Si déjà connecté #}
+        {% if app.user %}
+            <div class="mb-4 text-sm text-blue-700 bg-blue-100 p-3 rounded-lg">
+                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, 
+                <a href="{{ path('app_logout') }}" class="text-blue-600 underline">Se déconnecter</a>.
+            </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            <div>
+                <label for="inputEmail" class="block mb-1 text-sm font-medium">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" autocomplete="email" required autofocus>
+            </div>
+
+            <div>
+                <label for="inputPassword" class="block mb-1 text-sm font-medium">Mot de passe</label>
+                <input type="password" name="password" id="inputPassword" class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" autocomplete="current-password" required>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div class="flex items-center">
+                <input id="remember_me" type="checkbox" name="_remember_me" class="w-4 h-4 text-blue-600 border-gray-300 rounded">
+                <label for="remember_me" class="ml-2 text-sm text-gray-900">Se souvenir de moi</label>
+            </div>
+
+            <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                Connexion
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm">
+            <p class="mb-2">
+                <a href="{{ path('app_forgot_password_request') }}" class="text-blue-600 hover:underline">Mot de passe oublié ?</a>
+            </p>
+            <p>
+                Pas encore inscrit ?
+                <a href="{{ path('app_register') }}" class="text-blue-600 hover:underline">Créer un compte</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -10,9 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[Vich\Uploadable]
+#[UniqueEntity('title')]
 class Recipe
 {
     #[ORM\Id]
@@ -33,7 +35,7 @@ class Recipe
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: "Le contenu de la recette est obligatoire.")]
     #[Assert\Length(
-        min: 10,
+        min: 50,
         minMessage: "Le contenu doit contenir au moins {{ limit }} caractères."
     )]
     private string $content;
@@ -57,15 +59,23 @@ class Recipe
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
     /**
      * @var Collection<int, Ingredient>
      */
-    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recipe')]
+    #[ORM\ManyToMany(targetEntity: Ingredient::class, mappedBy: 'recipes')]
     private Collection $ingredients;
+
+    #[ORM\Column]
+    private ?int $time = null;
 
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable(); 
+
     }
 
     // Getters / Setters...
@@ -104,6 +114,18 @@ class Recipe
         $this->updatedAt = $updatedAt;
     }
 
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Ingredient>
      */
@@ -116,21 +138,13 @@ class Recipe
     {
         if (!$this->ingredients->contains($ingredient)) {
             $this->ingredients->add($ingredient);
-            $ingredient->setRecipe($this);
         }
-
         return $this;
     }
 
     public function removeIngredient(Ingredient $ingredient): static
     {
-        if ($this->ingredients->removeElement($ingredient)) {
-            // set the owning side to null (unless already changed)
-            if ($ingredient->getRecipe() === $this) {
-                $ingredient->setRecipe(null);
-            }
-        }
-
+        $this->ingredients->removeElement($ingredient);
         return $this;
     }
 
@@ -171,6 +185,18 @@ class Recipe
     public function setFoodGroup(?FoodGroup $foodGroup): static
     {
         $this->foodGroup = $foodGroup;
+
+        return $this;
+    }
+
+    public function getTime(): ?int
+    {
+        return $this->time;
+    }
+
+    public function setTime(int $time): static
+    {
+        $this->time = $time;
 
         return $this;
     }
