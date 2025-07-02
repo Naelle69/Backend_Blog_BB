@@ -29,17 +29,24 @@ class RegistrationController extends AbstractController
 
         // Si le formulaire est soumis et valide (validation Symfony OK)
         if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword($plainPassword); // mot de passe en clair (DANGER en prod)
-            $user->setRoles(['ROLE_USER']);
+            // Hashage sécurisé du mot de passe fourni
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $form->get('plainPassword')->getData()
+            );
+            $user->setPassword($hashedPassword);        // Affectation du mot de passe hashé
+            $user->setRoles(['ROLE_USER']);             // Définition du rôle par défaut
 
             try {
+                // Enregistrement de l'utilisateur en base de données
                 $em->persist($user);
                 $em->flush();
 
+                // Message flash en cas de succès, redirection vers la page de connexion
                 $this->addFlash('success', 'Inscription réussie ! Vous pouvez maintenant vous connecter.');
                 return $this->redirectToRoute('app_login');
             } catch (UniqueConstraintViolationException $e) {
+                // Si l'email est déjà utilisé (clé unique), on redirige vers la connexion avec un message
                 $this->addFlash('warning', 'Cet email est déjà utilisé. Veuillez vous connecter ou réinitialiser votre mot de passe.');
                 return $this->redirectToRoute('app_login');
             }
