@@ -55,4 +55,3 @@ security:
 
         # Utilisateur connecté
         - { path: ^/profile, roles: ROLE_USER }
-
